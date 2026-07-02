@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title>Bitcoin coin</title>
+  <defs>
+    <linearGradient id="coin-fill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a" />
+      <stop offset="45%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="56" fill="url(#coin-fill)" stroke="#78350f" stroke-width="6" />
+  <path
+    fill="#fff7ed"
+    d="M74.79 55.75c4.71-2.36 7.53-6.71 6.24-13.54-1.77-9.06-9.45-12.04-18.16-12.97V20H57.3v8.86h-6.02V20h-5.57v8.86H31.5v5.98h6.96c1.82 0 2.76.98 2.76 2.6v53.08c0 1.89-1.2 2.94-3.08 2.94H31.5v6.02h14.21V108h5.57v-8.52h6.02V108h5.57v-8.73c12.01-.69 20.49-4.58 22.55-15.72 1.64-8.88-2.27-13.68-10.63-16.8ZM54 37.55c5.47 0 11.33 1.71 12.41 7.99 1.03 5.96-4.53 8.15-10.03 8.15H51.3V37.55H54Zm2.37 50.9H51.3V61.97h6.42c6.64 0 13.16 1.55 14.2 9.15 1.12 8.22-5.99 17.33-15.55 17.33Z"
+  />
+</svg>
