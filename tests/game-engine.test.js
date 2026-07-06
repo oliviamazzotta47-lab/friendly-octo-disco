@@ -63,3 +63,29 @@ test('upgrade cost increases after each level', () => {
   assert.equal(initialCost, 10)
   assert.equal(secondCost, 18)
 })
+
+test('advanceGame ignores non-finite elapsed time input', () => {
+  const initialState = createInitialGameState()
+  const stateWithPassiveIncome = purchaseUpgrade(
+    {
+      ...initialState,
+      bitcoins: 15,
+    },
+    'gpu-rig',
+  )
+
+  const advancedState = advanceGame(stateWithPassiveIncome, Number.NaN)
+
+  assert.equal(advancedState, stateWithPassiveIncome)
+})
+
+test('buying an unknown upgrade is a no-op', () => {
+  const initialState = {
+    ...createInitialGameState(),
+    bitcoins: 999,
+  }
+
+  const nextState = purchaseUpgrade(initialState, 'unknown-upgrade')
+
+  assert.equal(nextState, initialState)
+})
