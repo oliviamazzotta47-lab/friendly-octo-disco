@@ -5,8 +5,10 @@ import {
   advanceGame,
   createInitialGameState,
   getUpgradeCost,
+  loadGameState,
   mineBitcoin,
   purchaseUpgrade,
+  saveGameState,
 } from '../src/game/engine.js'
 
 test('manual mining increases wallet and total mined by click power', () => {
@@ -62,4 +64,27 @@ test('upgrade cost increases after each level', () => {
 
   assert.equal(initialCost, 10)
   assert.equal(secondCost, 18)
+})
+
+test('saveGameState and loadGameState round-trip preserves bitcoins, totalMined, and derived rates', () => {
+  const store = {}
+  globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => { store[k] = v } }
+
+  const original = purchaseUpgrade({ ...createInitialGameState(), bitcoins: 100 }, 'gpu-rig')
+  saveGameState(original)
+  const loaded = loadGameState()
+
+  assert.equal(loaded.bitcoins, original.bitcoins)
+  assert.equal(loaded.totalMined, original.totalMined)
+  assert.equal(loaded.clickPower, original.clickPower)
+  assert.equal(loaded.passiveRate, original.passiveRate)
+  assert.equal(loaded.upgrades['gpu-rig'], 1)
+
+  delete globalThis.localStorage
+})
+
+test('loadGameState returns null when storage is empty', () => {
+  globalThis.localStorage = { getItem: () => null, setItem: () => {} }
+  assert.equal(loadGameState(), null)
+  delete globalThis.localStorage
 })
