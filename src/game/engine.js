@@ -60,7 +60,11 @@ export function mineBitcoin(state) {
 }
 
 export function advanceGame(state, elapsedMs) {
-  if (elapsedMs <= 0 || state.passiveRate <= 0) {
+  if (!Number.isFinite(elapsedMs) || elapsedMs <= 0) {
+    return state
+  }
+
+  if (!Number.isFinite(state.passiveRate) || state.passiveRate <= 0) {
     return state
   }
 
