@@ -40,14 +40,14 @@ export function createGameStore() {
       }
 
       lastUpdated = performance.now()
-      timerId = window.setInterval(tick, 250)
+      timerId = globalThis.setInterval(tick, 250)
     },
     stop() {
       if (!timerId) {
         return
       }
 
-      window.clearInterval(timerId)
+      globalThis.clearInterval(timerId)
       timerId = undefined
     },
     mine() {
