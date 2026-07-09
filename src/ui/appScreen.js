@@ -41,7 +41,35 @@ const getUpgradeMarkup = (state) =>
     `
   }).join('')
 
-export function renderApp(root, state, actions) {
+const getStoreMarkup = (stripeStore) =>
+  stripeStore.items.map((item) => `
+    <li class="store-card">
+      <div class="store-card__top">
+        <div>
+          <h3>${item.name}</h3>
+          <small>${item.unityProductId}</small>
+        </div>
+        <span class="store-card__meta">${item.priceLabel}</span>
+      </div>
+      <p>${item.description}</p>
+      ${
+        item.isConfigured
+          ? `<a
+              class="store-card__button"
+              href="${item.paymentLink}"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Buy with Stripe
+            </a>`
+          : `<button type="button" class="store-card__button" disabled>
+              Add Stripe link in env
+            </button>`
+      }
+    </li>
+  `).join('')
+
+export function renderApp(root, state, actions, stripeStore) {
   root.innerHTML = `
     <main class="screen">
       <section class="hero">
@@ -89,12 +117,38 @@ export function renderApp(root, state, actions) {
           </div>
         </section>
 
-        <aside class="panel panel--upgrades">
-          <h2>Upgrades</h2>
-          <p>Spend Bitcoin to boost manual clicks and unlock faster passive mining.</p>
-          <ul class="upgrade-list">
-            ${getUpgradeMarkup(state)}
-          </ul>
+        <aside class="sidebar">
+          <section class="panel panel--upgrades">
+            <h2>Upgrades</h2>
+            <p>Spend Bitcoin to boost manual clicks and unlock faster passive mining.</p>
+            <ul class="upgrade-list">
+              ${getUpgradeMarkup(state)}
+            </ul>
+          </section>
+
+          <section class="panel panel--store">
+            <div class="panel__heading">
+              <div>
+                <h2>Unity Store Purchases</h2>
+                <p>Route web checkout buttons to Stripe while keeping Unity product IDs visible.</p>
+              </div>
+              ${
+                stripeStore.dashboardUrl
+                  ? `<a
+                      class="panel__link"
+                      href="${stripeStore.dashboardUrl}"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      Stripe Dashboard
+                    </a>`
+                  : ''
+              }
+            </div>
+            <ul class="store-list">
+              ${getStoreMarkup(stripeStore)}
+            </ul>
+          </section>
         </aside>
       </section>
 
