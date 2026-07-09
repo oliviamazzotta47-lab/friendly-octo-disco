@@ -41,7 +41,7 @@ const getUpgradeMarkup = (state) =>
     `
   }).join('')
 
-const getStoreMarkup = (stripeStore) =>
+const getStoreMarkup = (stripeStore, purchaseState) =>
   stripeStore.items.map((item) => `
     <li class="store-card">
       <div class="store-card__top">
@@ -52,24 +52,35 @@ const getStoreMarkup = (stripeStore) =>
         <span class="store-card__meta">${item.priceLabel}</span>
       </div>
       <p>${item.description}</p>
-      ${
-        item.isConfigured
-          ? `<a
-              class="store-card__button"
-              href="${item.paymentLink}"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              Buy with Stripe
-            </a>`
-          : `<button type="button" class="store-card__button" disabled>
-              Add Stripe link in env
-            </button>`
-      }
+      <button
+        type="button"
+        class="store-card__button"
+        data-action="buy-store-item"
+        data-product-id="${item.id}"
+        ${purchaseState.activeProductId ? 'disabled' : ''}
+      >
+        ${
+          purchaseState.activeProductId === item.id
+            ? 'Opening Stripe...'
+            : 'Buy with Stripe'
+        }
+      </button>
     </li>
   `).join('')
 
-export function renderApp(root, state, actions, stripeStore) {
+const getPurchaseMessageMarkup = (purchaseState) => {
+  if (!purchaseState.message) {
+    return ''
+  }
+
+  return `
+    <p class="store-message store-message--${purchaseState.tone}" role="status">
+      ${purchaseState.message}
+    </p>
+  `
+}
+
+export function renderApp(root, state, actions, stripeStore, purchaseState) {
   root.innerHTML = `
     <main class="screen">
       <section class="hero">
@@ -130,7 +141,7 @@ export function renderApp(root, state, actions, stripeStore) {
             <div class="panel__heading">
               <div>
                 <h2>Unity Store Purchases</h2>
-                <p>Route web checkout buttons to Stripe while keeping Unity product IDs visible.</p>
+                <p>Start checkout from the app, track payment in Stripe, and keep Unity product IDs visible.</p>
               </div>
               ${
                 stripeStore.dashboardUrl
@@ -145,8 +156,9 @@ export function renderApp(root, state, actions, stripeStore) {
                   : ''
               }
             </div>
+            ${getPurchaseMessageMarkup(purchaseState)}
             <ul class="store-list">
-              ${getStoreMarkup(stripeStore)}
+              ${getStoreMarkup(stripeStore, purchaseState)}
             </ul>
           </section>
         </aside>
@@ -159,5 +171,8 @@ export function renderApp(root, state, actions, stripeStore) {
   root.querySelector('[data-action="mine"]').addEventListener('click', actions.onMine)
   root.querySelectorAll('[data-action="buy-upgrade"]').forEach((button) => {
     button.addEventListener('click', () => actions.onBuyUpgrade(button.dataset.upgradeId))
+  })
+  root.querySelectorAll('[data-action="buy-store-item"]').forEach((button) => {
+    button.addEventListener('click', () => actions.onBuyStoreItem(button.dataset.productId))
   })
 }

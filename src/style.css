@@ -304,6 +304,31 @@ button {
   gap: 1rem;
 }
 
+.store-message {
+  margin: 0 0 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  font-weight: 600;
+}
+
+.store-message--info {
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #bae6fd;
+}
+
+.store-message--success {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  color: #bbf7d0;
+}
+
+.store-message--error {
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  color: #fecaca;
+}
+
 .store-card {
   display: grid;
   gap: 0.9rem;

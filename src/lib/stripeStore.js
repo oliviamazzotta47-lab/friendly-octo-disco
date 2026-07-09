@@ -15,17 +15,15 @@ export function sanitizeExternalUrl(value) {
   }
 }
 
+export function sanitizeApiBaseUrl(value) {
+  const normalized = sanitizeExternalUrl(value)
+  return normalized ?? ''
+}
+
 export function createStripeStore(env = {}) {
   return {
+    apiBaseUrl: sanitizeApiBaseUrl(env.VITE_STRIPE_API_BASE_URL),
     dashboardUrl: sanitizeExternalUrl(env.VITE_STRIPE_DASHBOARD_URL),
-    items: STORE_ITEMS.map((item) => {
-      const paymentLink = sanitizeExternalUrl(env[item.paymentLinkEnvKey])
-
-      return {
-        ...item,
-        paymentLink,
-        isConfigured: paymentLink !== null,
-      }
-    }),
+    items: STORE_ITEMS,
   }
 }

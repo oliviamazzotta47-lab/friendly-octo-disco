@@ -5,7 +5,7 @@ export const STORE_ITEMS = [
     description: 'Launch a small Unity in-app purchase bundle for new players.',
     unityProductId: 'com.friendlyoctodisco.starterpack',
     priceLabel: '$4.99',
-    paymentLinkEnvKey: 'VITE_STRIPE_PAYMENT_LINK_STARTER_PACK',
+    priceEnvKey: 'STRIPE_PRICE_ID_STARTER_PACK',
   },
   {
     id: 'pro-pack',
@@ -13,7 +13,7 @@ export const STORE_ITEMS = [
     description: 'Offer a mid-tier purchase with more value for returning players.',
     unityProductId: 'com.friendlyoctodisco.propack',
     priceLabel: '$14.99',
-    paymentLinkEnvKey: 'VITE_STRIPE_PAYMENT_LINK_PRO_PACK',
+    priceEnvKey: 'STRIPE_PRICE_ID_PRO_PACK',
   },
   {
     id: 'ultimate-pack',
@@ -21,6 +21,6 @@ export const STORE_ITEMS = [
     description: 'Promote a premium Unity bundle tied to your Stripe catalog.',
     unityProductId: 'com.friendlyoctodisco.ultimatepack',
     priceLabel: '$29.99',
-    paymentLinkEnvKey: 'VITE_STRIPE_PAYMENT_LINK_ULTIMATE_PACK',
+    priceEnvKey: 'STRIPE_PRICE_ID_ULTIMATE_PACK',
   },
 ]
