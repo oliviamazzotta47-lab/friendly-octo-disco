@@ -88,3 +88,29 @@ test('loadGameState returns null when storage is empty', () => {
   assert.equal(loadGameState(), null)
   delete globalThis.localStorage
 })
+
+test('advanceGame ignores non-finite elapsed time input', () => {
+  const initialState = createInitialGameState()
+  const stateWithPassiveIncome = purchaseUpgrade(
+    {
+      ...initialState,
+      bitcoins: 15,
+    },
+    'gpu-rig',
+  )
+
+  const advancedState = advanceGame(stateWithPassiveIncome, Number.NaN)
+
+  assert.equal(advancedState, stateWithPassiveIncome)
+})
+
+test('buying an unknown upgrade is a no-op', () => {
+  const initialState = {
+    ...createInitialGameState(),
+    bitcoins: 999,
+  }
+
+  const nextState = purchaseUpgrade(initialState, 'unknown-upgrade')
+
+  assert.equal(nextState, initialState)
+})
