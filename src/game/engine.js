@@ -1,6 +1,7 @@
 import { UPGRADE_DEFINITIONS } from '../models/upgrades.js'
 
 const BASE_CLICK_POWER = 1
+const SAVE_KEY = 'btc-clicker-save'
 
 const toFixedNumber = (value) => Number(value.toFixed(2))
 
@@ -60,7 +61,11 @@ export function mineBitcoin(state) {
 }
 
 export function advanceGame(state, elapsedMs) {
-  if (elapsedMs <= 0 || state.passiveRate <= 0) {
+  if (!Number.isFinite(elapsedMs) || elapsedMs <= 0) {
+    return state
+  }
+
+  if (!Number.isFinite(state.passiveRate) || state.passiveRate <= 0) {
     return state
   }
 
@@ -93,5 +98,26 @@ export function purchaseUpgrade(state, upgradeId) {
     upgrades,
     clickPower,
     passiveRate,
+  }
+}
+
+export function saveGameState(state) {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ bitcoins: state.bitcoins, totalMined: state.totalMined, upgrades: state.upgrades }))
+  } catch {
+    // storage unavailable – ignore
+  }
+}
+
+export function loadGameState() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY)
+    if (!raw) return null
+    const { bitcoins, totalMined, upgrades } = JSON.parse(raw)
+    const merged = { ...buildUpgradeLevels(), ...upgrades }
+    const { clickPower, passiveRate } = calculateRates(merged)
+    return { bitcoins, totalMined, clickPower, passiveRate, upgrades: merged }
+  } catch {
+    return null
   }
 }

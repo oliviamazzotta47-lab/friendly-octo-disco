@@ -1,12 +1,13 @@
-import { advanceGame, createInitialGameState, mineBitcoin, purchaseUpgrade } from './engine.js'
+import { advanceGame, createInitialGameState, loadGameState, mineBitcoin, purchaseUpgrade, saveGameState } from './engine.js'
 
 export function createGameStore() {
-  let state = createInitialGameState()
+  let state = loadGameState() ?? createInitialGameState()
   let timerId
   let lastUpdated = performance.now()
   const listeners = new Set()
 
   const notify = () => {
+    saveGameState(state)
     for (const listener of listeners) {
       listener(state)
     }
